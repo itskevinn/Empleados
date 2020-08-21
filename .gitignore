@@ -1,0 +1,9 @@
+
+*.pdb
+*.cache
+*.CopyComplete
+*.dll
+*.txt
+*.targets
+*.v2
+.vs/empleados/v16/.suo

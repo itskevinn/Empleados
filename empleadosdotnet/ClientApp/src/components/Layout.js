@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import { Container } from 'reactstrap';
-import { NavMenu } from './NavMenu';
-
+import React, { Component } from "react";
+import { NavMenu } from "./NavMenu";
+import '../css/estilos.css'
 export class Layout extends Component {
   static displayName = Layout.name;
 
-  render () {
+  render() {
     return (
       <div>
-        <NavMenu />
-        <Container>
-          {this.props.children}
-        </Container>
+        <div className="navbar-estatico">
+          <NavMenu />
+        </div>
+        <div className="width-completo">{this.props.children}</div>
       </div>
     );
   }
