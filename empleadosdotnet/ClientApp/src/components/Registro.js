@@ -1,6 +1,19 @@
 import React from "react";
+import {
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
-import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Modal,
+  ModalBody,
+} from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/estilos.css";
 import EmpresaService from "../service/EmpresaService";
 export class RegistroEmpresas extends React.Component {
@@ -24,11 +37,13 @@ export class RegistroEmpresas extends React.Component {
       contacto: "",
       email: "",
     },
-    alerta: false,
+    modal: false,
     respuesta: null,
     mensaje: "",
     colorAlerta: "",
+    status: 0,
   };
+
   handleChange = (e) => {
     this.setState({
       form: {
@@ -39,30 +54,10 @@ export class RegistroEmpresas extends React.Component {
   };
   guardar = () => {
     var empresa = { ...this.state.form };
-    EmpresaService.guardar(empresa);
+    EmpresaService.guardar(empresa).then((res) => this.mostrarModal(res));
   };
-  obtenerRespuesta = (res) => {
-    /* if (res.status >= 400 && res.status < 600) {
-      let mensajeValidaciones = "";
-      var _res;
-      this.setState((state) => {
-        return { respuesta: res };
-      });
-      console.log(this.state.respuesta);
-      _res = this.state.respuesta;
-      for (const prop in _res.errors) {
-        // eslint-disable-next-line no-loop-func
-        _res.errors[prop].forEach((element) => {
-          mensajeValidaciones += `${element}\n`;
-        });
-        mensajeValidaciones += ",";
-        this.setState({ colorAlerta: "danger" });
-      }
-      this.mostrarAlerta(mensajeValidaciones);
-    } else {
-      this.setState({ colorAlerta: "success" });
-      this.mostrarAlerta("Empresa registrada con éxito!");
-    }*/
+  mostrarModal = (res) => {
+    this.setState({ modal: true, mensaje: res.mensaje, status: res.status });
   };
 
   scrollFuncion() {
@@ -74,12 +69,39 @@ export class RegistroEmpresas extends React.Component {
   }
 
   render() {
-    const guardado = this.state.alerta;
+    const modal = this.state.modal;
+    const toggle = () => this.setState({ modal: !this.state.modal });
     let alerta;
-    if (guardado) {
-      alerta = (
-        <Alert color={this.state.colorAlerta}>{this.state.mensaje}</Alert>
-      );
+    if (modal) {
+      if (this.state.status >= 400) {
+        alerta = (
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalBody className="bg-danger text-center">
+                <FontAwesomeIcon icon={faTimesCircle} size="3x" color="white" />
+                <div className="separar-arriba-sm text-white">
+                  {" "}
+                  <b>{this.state.mensaje}</b>{" "}
+                </div>
+              </ModalBody>
+            </Modal>
+          </div>
+        );
+      } else {
+        alerta = (
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalBody className="bg-success text-center">
+                <FontAwesomeIcon icon={faCheckCircle} size="3x" color="white" />
+                <div className="separar-arriba-sm text-white">
+                  {" "}
+                  <b>{this.state.mensaje}</b>{" "}
+                </div>
+              </ModalBody>
+            </Modal>
+          </div>
+        );
+      }
     }
     return (
       <div className="container">
@@ -141,7 +163,6 @@ export class RegistroEmpresas extends React.Component {
                 >
                   Registrar
                 </Button>
-                <br></br>
                 {alerta}
               </div>
             </Form>

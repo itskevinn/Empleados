@@ -1,29 +1,32 @@
-import { ModalOk } from "../components/ModalOk";
-import React from "react";
-
 const handleResponse = (res) => {
   let status = res.status;
   let messages = res.errors;
   if (status >= 400 && status < 600) {
-    leerError(messages);
+    return leerError(messages, status);
   } else {
-    console.log("Empresa registrada con éxito!");
+    // eslint-disable-next-line no-unused-vars
+    let res = { status: 0, mensaje: "" };
+    return (res = {
+      status: 200,
+      mensaje: "¡Empresa registrada con éxito!",
+    });
   }
 };
-const leerError = (messages) => {
-  let mensajeValidaciones;
+const leerError = (messages, _status) => {
+  let mensajeValidaciones = {
+    status: _status,
+    mensaje: "",
+  };
   for (const prop in messages) {
     // eslint-disable-next-line no-loop-func
     messages[prop].forEach((element) => {
-      mensajeValidaciones += `${element}\n`;
+      mensajeValidaciones.mensaje += `${element}\n`;
     });
-    mensajeValidaciones += ",";
+    mensajeValidaciones.mensaje += ",";
   }
-  mostrarModal(mensajeValidaciones);
+  return mensajeValidaciones;
 };
-const mostrarModal = (mensaje) => {
-  return <ModalOk mensaje={mensaje} />;
-};
+
 export default {
   handleResponse,
 };

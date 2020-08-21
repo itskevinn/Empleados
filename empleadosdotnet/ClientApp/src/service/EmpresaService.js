@@ -17,7 +17,9 @@ const guardar = (empresa) => {
   })
     .then((resp) => resp.json())
     .catch((e) => console.error("Error: ", e))
-    .then((res) => handleResponse.handleResponse(res));
+    .then((res) => {
+      return handleResponse.handleResponse(res);
+    });
 };
 
 const actualizar = (nit, empresa) => {

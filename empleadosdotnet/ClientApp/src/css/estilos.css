@@ -12,6 +12,15 @@
 .navbar-estatico {
   min-width: 100%;
 }
+.cuerpo-modal {
+  color: white;
+}
+.cuerpo-modal .exito {
+  background-color: #5cb85c;
+}
+.cuerpo-modal .error {
+  background-color: #d9534f;
+}
 .contenido-centrado {
   display: -webkit-box;
   display: -webkit-flex;
